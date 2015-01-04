@@ -1,0 +1,24 @@
+<link rel="import" href="../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html"/>
+<link rel="import" href="../components/weather-list.html"/>
+
+<polymer-element name="weather-grid" extends="weather-list">
+    <template>
+        <style>
+        </style>
+        <label>Enter city:</label>
+        <input id="citytext" type="text"/>
+        <shadow></shadow>
+    </template>
+    <script>
+        Polymer({
+            ready: function () {
+                this.super(arguments);
+                this.$.citytext.addEventListener('change', this.cityTextChanged.bind(this));
+            },
+            cityTextChanged: function () {
+                this.getWeather(this.$.citytext.value);
+            }
+        });
+    </script>
+</polymer-element>

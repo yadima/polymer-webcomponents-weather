@@ -1,0 +1,124 @@
+<link rel="import" href="../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html"/>
+
+<polymer-element name="weather-card" attributes="city mode weatherdata">
+    <template>
+        <style>
+            #card {
+                margin: 15px;
+                background-color: #fff;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                border-radius: 2px;
+                padding: 8px;
+                overflow: hidden;
+            }
+
+            #card>div {
+                padding: 2px;
+            }
+            .large {
+                font-size: x-large;
+                color: #878787;
+            }
+            .medium {
+                font-size: medium;
+                color: #878787;
+            }
+            .degrees {
+                float:left;
+            }
+            .degrees>span {
+                font-size: 64px;
+            }
+            .celcius {
+                float:left;
+                margin-top: 8px;
+                color: #878787;
+            }
+            #card.hide {
+                display: none;
+            }
+            #card.dayData div {
+                float: left;
+            }
+        </style>
+
+        <template if="{{mode == 'day'}}">
+            <core-ajax id="ajax"
+                       auto
+                       url=""
+                       on-core-response="{{weatherLoaded}}"
+                       handleAs="json"></core-ajax>
+
+            <div id="card" class="hide">
+                <div class="large">{{weather.name + ', ' + weather.sys.country}}</div>
+                <div class="medium">{{formatDate(weather.dt, 'dddd HH:mm')}}</div>
+                <div class="medium">{{weather.weather[0].description}}</div>
+                <div>
+                    <img style="width: 64px; height: 64px; float: left;"
+                         src="http://openweathermap.org/img/w/{{weather.weather[0].icon}}.png"
+                         alt=""/>
+                    <div class="degrees">
+                        <span>{{formatTemperature(weather.main.temp)}}</span>
+                    </div>
+                    <div class="celsius">&deg;C</div>
+                </div>
+            </div>
+        </template>
+
+        <template if="{{mode == 'dayData'}}">
+            <div id="card" class="hide">
+                <div class="large">{{city}}</div>
+                <div class="medium">{{formatDate(weather.dt, 'dddd HH:mm')}}</div>
+                <div class="medium">{{weather.weather[0].description}}</div>
+                <div>
+                    <img style="width: 64px; height: 64px; float: left;"
+                         src="http://openweathermap.org/img/w/{{weather.weather[0].icon}}.png"
+                         alt=""/>
+                    <div class="degrees">
+                        <span>{{formatTemperature(weather.temp.day)}}</span>
+                    </div>
+                    <div class="celsius">&deg;C</div>
+                </div>
+            </div>
+        </template>
+
+    </template>
+
+    <script>
+        Polymer({
+            city: "Kyiv",
+            weather: {},
+            mode: 'day',
+            weatherdata: {},
+            ready: function() {
+                switch(this.mode) {
+                    case 'day':
+                        this.$.ajax.url = "http://api.openweathermap.org/data/2.5/weather?q=" + this.city + "&units=metric&APPID=50e418e0f0c0e501713115a1df9ca42e";
+                        break;
+                    case 'dayData':
+                        this.weather = JSON.parse(this.weatherdata);
+                        this.$.card.classList.remove('hide');
+                        break;
+                }
+
+
+            },
+            weatherLoaded: function() {
+                this.weather = this.$.ajax.response;
+                this.$.card.classList.remove('hide');
+
+            },
+            formatDate: function(timestamp, format) {
+                return moment(timestamp * 1000).format(format);
+            },
+
+            formatTemperature: function(temp) {
+                if (typeof temp !== 'undefined') {
+                    return Math.round(temp);
+                }
+            }
+        });
+    </script>
+
+</polymer-element>

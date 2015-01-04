@@ -1,0 +1,28 @@
+{
+  "name": "weather",
+  "version": "0.0.1",
+  "authors": [
+    "Pavlo Evsegneev <Pavlo_Evsegneev@epam.com>"
+  ],
+  "description": "polymer weather app",
+  "main": "index.html",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "core-elements": "Polymer/core-elements#~0.5.1",
+    "paper-input": "Polymer/paper-input#~0.5.1",
+    "moment": "~2.8.4",
+    "underscore": "~1.7.0",
+    "core-list": "Polymer/core-list#~0.5.2"
+  }
+}

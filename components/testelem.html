@@ -1,0 +1,21 @@
+<link rel="import" href="../bower_components/polymer/polymer.html"/>
+
+<polymer-element name="my-counter">
+    <template>
+        <style>
+            /* .. */
+        </style>
+        Value: <span id="counterVal">{{counter}}</span><br>
+        <button on-tap="{{increment}}">Increment</button>
+    </template>
+
+    <script>
+        Polymer('my-counter', {
+            counter: 0,
+            increment: function() {
+                this.counter++;
+            }
+        });
+    </script>
+
+</polymer-element>

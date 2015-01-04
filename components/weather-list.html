@@ -1,0 +1,40 @@
+<link rel="import" href="../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html"/>
+
+<polymer-element name="weather-list" attributes="city">
+    <template>
+        <style>
+            #list {
+                height: 1600px;
+                width: 600px;
+            }
+        </style>
+        <core-ajax id="ajax"
+                   auto
+                   url=""
+                   on-core-response="{{weatherLoaded}}"
+                   handleAs="json"></core-ajax>
+        <template repeat="{{data as model}}">
+            <weather-card mode="dayData" weatherdata="{{stringifyData(model)}}" city="{{city}}"></weather-card>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            data: [],
+            ready: function () {
+                this.getWeather(this.city);
+            },
+            weatherLoaded: function () {
+                this.data = this.$.ajax.response.list.slice(0);
+                this.city = this.$.ajax.response.city.name + ',' + this.$.ajax.response.city.country;
+            },
+            stringifyData: function(data) {
+                return JSON.stringify(data);
+            },
+            getWeather: function (city) {
+                this.city = city;
+                this.$.ajax.url = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=' + this.city + '&mode=json&units=metric&cnt=10&APPID=50e418e0f0c0e501713115a1df9ca42e';
+            }
+        });
+    </script>
+</polymer-element>
